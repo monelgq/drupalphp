@@ -11,7 +11,7 @@ COPY config/www.conf /usr/local/etc/php-fpm.d/
 COPY config/opcache-recommended.ini /usr/local/etc/php/conf.d/
 
 # 安装必要的PHP扩展PHP extensions，参考主机安装
-RUN apt-get update && apt-get install -y apt-utils wget git \ 
+RUN apt-get update && apt-get install -y apt-utils wget git mariadb-client \ 
        libpng12-dev libjpeg-dev libpq-dev libfreetype6-dev libmcrypt-dev libicu-dev zlib1g-dev libmemcached-dev libjpeg62-turbo-dev \ 
        && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
        && docker-php-ext-install gd opcache pdo_mysql mysqli zip mcrypt bcmath exif sockets calendar intl \
@@ -25,24 +25,24 @@ RUN mkdir -p /usr/src/php/ext/redis \
       && rm -rd /usr/src/php/ext/redis \
       && rm /tmp/phpredis.tar.gz
          
-# 设置环境变量
+# 设置drupal8版本和MD5校验环境变量以及安装根目录，需要经常更新
 ENV DRUPAL_ROOT /var/www/drupal8
-ENV DRUPAL_VERSION 8.2.1
-ENV DRUPAL_MD5 ad5ab19697ee0f7d786184ceaa7ddf6a
+ENV DRUPAL_VERSION 8.2.3
+ENV DRUPAL_MD5 683ddc33077bb1f7cc795607d114144e
 
 # 创建容器内部drupal8站点根目录和drupal8源代码下载目录
 RUN set -x \
        && mkdir -p ${DRUPAL_ROOT} \
        && mkdir -p /usr/src/drupal8
 
-# 安装 composer，国外网址难于下载
-# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# 安装 composer，国外网址难于下载，但是在github自动编译没有问题
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # 安装 composer，暂时使用本人的服务器下载
-RUN cd /usr/local/bin \
-       && wget http://133.130.123.167/download/composer.phar \
-       && mv composer.phar composer \
-       && chmod +x /usr/local/bin/composer
+# RUN cd /usr/local/bin \
+#        && wget http://133.130.123.167/download/composer.phar \
+#        && mv composer.phar composer \
+#        && chmod +x /usr/local/bin/composer
 
 # 安装 drush
 RUN php -r "readfile('https://s3.amazonaws.com/files.drush.org/drush.phar');" > /usr/local/bin/drush \
