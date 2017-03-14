@@ -28,7 +28,8 @@ RUN mkdir -p /usr/src/php/ext/redis \
 # 设置drupal8版本和MD5校验环境变量以及安装根目录，需要经常更新
 ENV DRUPAL_ROOT /var/www/drupal8
 ENV DRUPAL_VERSION 8.2.6
-ENV DRUPAL_MD5 288aa9978b5027e26f20df93b6295f6c
+
+# ENV DRUPAL_MD5 288aa9978b5027e26f20df93b6295f6c
 
 # 创建容器内部drupal8站点根目录和drupal8源代码下载目录
 RUN set -x \
@@ -51,7 +52,8 @@ RUN php -r "readfile('https://s3.amazonaws.com/files.drush.org/drush.phar');" > 
 # 下载 drupal8最新版本 
 WORKDIR /usr/src/drupal8     
 RUN curl -fSL "https://ftp.drupal.org/files/projects/drupal-${DRUPAL_VERSION}.tar.gz" -o drupal.tar.gz \
-	&& echo "${DRUPAL_MD5} *drupal.tar.gz" | md5sum -c - \
+#	&& echo "${DRUPAL_MD5} *drupal.tar.gz" | md5sum -c - \
+
 	&& chown -R www-data:www-data ${DRUPAL_ROOT}
 
 WORKDIR ${DRUPAL_ROOT}
