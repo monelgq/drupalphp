@@ -27,7 +27,7 @@ RUN mkdir -p /usr/src/php/ext/redis \
          
 # 设置drupal8版本和MD5校验环境变量以及安装根目录，需要经常更新
 ENV DRUPAL_ROOT /var/www/drupal8
-ENV DRUPAL_VERSION 8.2.6
+ENV DRUPAL_VERSION 8.2.7
 
 # ENV DRUPAL_MD5 288aa9978b5027e26f20df93b6295f6c
 
@@ -48,12 +48,14 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # 安装 drush
 RUN php -r "readfile('https://s3.amazonaws.com/files.drush.org/drush.phar');" > /usr/local/bin/drush \
        && chmod +x /usr/local/bin/drush
+       
+# 安装 Drupal Console
+RUN curl https://drupalconsole.com/installer -o /usr/local/bin/drupal \
+       && chmod +x /usr/local/bin/drupal          
 
 # 下载 drupal8最新版本 
 WORKDIR /usr/src/drupal8     
 RUN curl -fSL "https://ftp.drupal.org/files/projects/drupal-${DRUPAL_VERSION}.tar.gz" -o drupal.tar.gz \
-#	&& echo "${DRUPAL_MD5} *drupal.tar.gz" | md5sum -c - \
-
 	&& chown -R www-data:www-data ${DRUPAL_ROOT}
 
 WORKDIR ${DRUPAL_ROOT}
