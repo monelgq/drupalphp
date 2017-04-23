@@ -27,7 +27,7 @@ RUN mkdir -p /usr/src/php/ext/redis \
          
 # 设置drupal8版本和MD5校验环境变量以及安装根目录，需要经常更新
 ENV DRUPAL_ROOT /var/www/drupal8
-ENV DRUPAL_VERSION 8.2.7
+ENV DRUPAL_VERSION 8.3.1
 
 # ENV DRUPAL_MD5 288aa9978b5027e26f20df93b6295f6c
 
