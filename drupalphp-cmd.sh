@@ -3,15 +3,17 @@
 set -e
 
 if [ -f /usr/src/drupal8/drupal.tar.gz ]; then
-    mv /usr/src/drupal8/drupal.tar.gz ${DRUPAL_ROOT}
-    cd ${DRUPAL_ROOT}
-    tar -xz --strip-components=1 -f drupal.tar.gz
-    rm drupal.tar.gz
+  mv /usr/src/drupal8/drupal.tar.gz ${DRUPAL_ROOT}
+  cd ${DRUPAL_ROOT}
+  tar -xz --strip-components=1 -f drupal.tar.gz
+  rm drupal.tar.gz
+
+# 在drupal根目录安装 drupalconsole本身      
+  composer require drupal/console:~1.0 --prefer-dist --optimize-autoloader --sort-packages
     
-#    composer require drupal/console:~1.0 --prefer-dist --optimize-autoloader
-#    composer update drupal/console --with-dependencies
+  chown -R www-data:www-data ${DRUPAL_ROOT}
+  chown -R www-data:www-data ${DRUPAL_PRIVATE}
     
-    chown -R www-data:www-data ${DRUPAL_ROOT}
 fi
 
 exec php-fpm

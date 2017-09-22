@@ -27,29 +27,25 @@ RUN mkdir -p /usr/src/php/ext/redis \
          
 # 设置drupal8版本和MD5校验环境变量以及安装根目录，需要经常更新
 ENV DRUPAL_ROOT /var/www/drupal8
-ENV DRUPAL_VERSION 8.3.1
+ENV DRUPAL_PRIVATE /var/www/private
+ENV DRUPAL_VERSION 8.3.7
 
-# ENV DRUPAL_MD5 288aa9978b5027e26f20df93b6295f6c
+# ENV DRUPAL_MD5 e7b1f382d6bd2b18d4b4aca01d335bc0
 
 # 创建容器内部drupal8站点根目录和drupal8源代码下载目录
 RUN set -x \
        && mkdir -p ${DRUPAL_ROOT} \
+       && mkdir -p ${DRUPAL_PRIVATE} \
        && mkdir -p /usr/src/drupal8
 
 # 安装 composer，国外网址难于下载，但是在github自动编译没有问题
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# 安装 composer，暂时使用本人的服务器下载
-# RUN cd /usr/local/bin \
-#        && wget http://133.130.123.167/download/composer.phar \
-#        && mv composer.phar composer \
-#        && chmod +x /usr/local/bin/composer
-
 # 安装 drush
 RUN php -r "readfile('https://s3.amazonaws.com/files.drush.org/drush.phar');" > /usr/local/bin/drush \
        && chmod +x /usr/local/bin/drush
        
-# 安装 Drupal Console
+# 全局安装 Drupal Console Launcher（区别在每个drupal项目单独安装的 Drupal Console本身）
 RUN curl https://drupalconsole.com/installer -o /usr/local/bin/drupal \
        && chmod +x /usr/local/bin/drupal          
 
