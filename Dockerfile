@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y apt-utils wget git mariadb-client \
        && rm -rf /var/lib/apt/lists/*
 	
 # 安装 php7 redis 扩展
-ADD https://github.com/phpredis/phpredis/archive/php7.tar.gz /tmp/phpredis.tar.gz
+ADD https://github.com/phpredis/phpredis/archive/3.1.4.tar.gz /tmp/phpredis.tar.gz
 RUN mkdir -p /usr/src/php/ext/redis \
       && tar xf /tmp/phpredis.tar.gz -C /usr/src/php/ext/redis --strip-components=1 \
       && docker-php-ext-install redis \
@@ -28,9 +28,9 @@ RUN mkdir -p /usr/src/php/ext/redis \
 # 设置drupal8版本和MD5校验环境变量以及安装根目录，需要经常更新
 ENV DRUPAL_ROOT /var/www/drupal8
 ENV DRUPAL_PRIVATE /var/www/private
-ENV DRUPAL_VERSION 8.3.7
+ENV DRUPAL_VERSION 8.4.2
 
-# ENV DRUPAL_MD5 e7b1f382d6bd2b18d4b4aca01d335bc0
+# ENV DRUPAL_MD5 a2b294d82ce751f93ba600f2de7884f4
 
 # 创建容器内部drupal8站点根目录和drupal8源代码下载目录
 RUN set -x \
