@@ -29,6 +29,7 @@ RUN mkdir -p /usr/src/php/ext/redis \
 ENV DRUPAL_ROOT /var/www/drupal8
 ENV DRUPAL_PRIVATE /var/www/private
 ENV DRUPAL_VERSION 8.4.2
+ENV DRUSH_VERSION 8.1.15
 
 # ENV DRUPAL_MD5 a2b294d82ce751f93ba600f2de7884f4
 
@@ -41,15 +42,15 @@ RUN set -x \
 # 安装 composer，国外网址难于下载，但是在github自动编译没有问题
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# 安装 drush
-RUN php -r "readfile('https://s3.amazonaws.com/files.drush.org/drush.phar');" > /usr/local/bin/drush \
+# 安装 指定版本的 drush
+RUN php -r "readfile('https://github.com/drush-ops/drush/releases/download/${DRUSH_VERSION}/drush.phar');" > /usr/local/bin/drush \
        && chmod +x /usr/local/bin/drush
        
 # 全局安装 Drupal Console Launcher（区别在每个drupal项目单独安装的 Drupal Console本身）
 RUN curl https://drupalconsole.com/installer -o /usr/local/bin/drupal \
        && chmod +x /usr/local/bin/drupal          
 
-# 下载 drupal8最新版本 
+# 下载指定的 drupal8 版本 
 WORKDIR /usr/src/drupal8     
 RUN curl -fSL "https://ftp.drupal.org/files/projects/drupal-${DRUPAL_VERSION}.tar.gz" -o drupal.tar.gz \
 	&& chown -R www-data:www-data ${DRUPAL_ROOT}
