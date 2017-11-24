@@ -55,9 +55,7 @@ WORKDIR /usr/src/drupal8
 RUN curl -fSL "https://ftp.drupal.org/files/projects/drupal-${DRUPAL_VERSION}.tar.gz" -o drupal.tar.gz \
 	&& chown -R www-data:www-data ${DRUPAL_ROOT}
 
-# 在drupal根目录安装 drupalconsole本身
 WORKDIR ${DRUPAL_ROOT}
-RUN composer require drupal/console:~1.0 --prefer-dist --optimize-autoloader --sort-packages
 
 # USER root
 # 容器启动时执行容器入口文件
