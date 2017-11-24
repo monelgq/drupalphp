@@ -18,7 +18,7 @@ else
 fi
 
 # 在drupal根目录安装 drupalconsole本身      
-composer require drupal/console:~1.0 --prefer-dist --optimize-autoloader --sort-packages
+# composer require drupal/console:~1.0 --prefer-dist --optimize-autoloader --sort-packages
     
 chown -R www-data:www-data ${DRUPAL_ROOT}
 chown -R www-data:www-data ${DRUPAL_PRIVATE}
