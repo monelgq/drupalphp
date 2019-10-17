@@ -1,5 +1,5 @@
 # 基础镜像
-FROM php:7.0-fpm
+FROM php:7.3-fpm
 
 # 镜像配置目录 【 /usr/local/etc/php/php.ini 】【 /usr/local/etc/php/conf.d 】【 /usr/local/etc/php-fpm.conf 】【 /usr/local/etc/php-fpm.d/www.conf 】
 
@@ -25,13 +25,12 @@ RUN mkdir -p /usr/src/php/ext/redis \
       && rm -rd /usr/src/php/ext/redis \
       && rm /tmp/phpredis.tar.gz
          
-# 设置drupal8版本和MD5校验环境变量以及安装根目录，需要经常更新
+# 设置drupal8版本以及安装根目录，需要经常更新
 ENV DRUPAL_ROOT /var/www/drupal8
 ENV DRUPAL_PRIVATE /var/www/private
-ENV DRUPAL_VERSION 8.4.2
-ENV DRUSH_VERSION 8.1.15
+ENV DRUPAL_VERSION 8.7.8
 
-# ENV DRUPAL_MD5 a2b294d82ce751f93ba600f2de7884f4
+#ENV DRUSH_VERSION 8.1.15
 
 # 创建容器内部drupal8站点根目录和drupal8源代码下载目录
 RUN set -x \
@@ -42,15 +41,19 @@ RUN set -x \
 # 安装 composer，国外网址难于下载，但是在github自动编译没有问题
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# 安装 指定版本的 drush
-RUN php -r "readfile('https://github.com/drush-ops/drush/releases/download/${DRUSH_VERSION}/drush.phar');" > /usr/local/bin/drush \
+# 安装 指定版本的 drush（已经不建议如此安装）
+#RUN php -r "readfile('https://github.com/drush-ops/drush/releases/download/${DRUSH_VERSION}/drush.phar');" > /usr/local/bin/drush \
+#       && chmod +x /usr/local/bin/drush
+
+# 全局安装 drush Launcher（区别在每个drupal项目通过composer单独安装的 drush依赖本身）
+RUN curl https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar -o /usr/local/bin/drush \
        && chmod +x /usr/local/bin/drush
-       
+              
 # 全局安装 Drupal Console Launcher（区别在每个drupal项目单独安装的 Drupal Console本身）
 RUN curl https://drupalconsole.com/installer -o /usr/local/bin/drupal \
-       && chmod +x /usr/local/bin/drupal          
+       && chmod +x /usr/local/bin/drupal     
 
-# 下载指定的 drupal8 版本 
+# 下载指定的 drupal8 版本
 WORKDIR /usr/src/drupal8     
 RUN curl -fSL "https://ftp.drupal.org/files/projects/drupal-${DRUPAL_VERSION}.tar.gz" -o drupal.tar.gz \
 	&& chown -R www-data:www-data ${DRUPAL_ROOT}
