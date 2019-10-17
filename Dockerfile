@@ -12,9 +12,11 @@ COPY config/opcache-recommended.ini /usr/local/etc/php/conf.d/
 
 # 安装必要的PHP扩展PHP extensions，参考主机安装
 RUN apt-get update && apt-get install -y apt-utils wget git mariadb-client \ 
-       libpng-dev libjpeg-dev libpq-dev libfreetype6-dev libmcrypt-dev libicu-dev zlib1g-dev libmemcached-dev libjpeg62-turbo-dev \ 
+       libpng-dev libjpeg-dev libpq-dev libfreetype6-dev libmcrypt-dev libicu-dev zlib1g-dev libmemcached-dev libjpeg62-turbo-dev \
+       && pecl install mcrypt-1.0.1 \
+       && docker-php-ext-enable mcrypt \
        && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-       && docker-php-ext-install gd opcache pdo_mysql mysqli zip mcrypt bcmath exif sockets calendar intl \
+       && docker-php-ext-install gd opcache pdo_mysql mysqli zip bcmath exif sockets calendar intl \
        && rm -rf /var/lib/apt/lists/*
 	
 # 安装 php7 redis 扩展
