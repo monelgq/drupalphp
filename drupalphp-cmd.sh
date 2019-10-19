@@ -8,25 +8,25 @@ if [ ! -f ${DRUPAL_ROOT}/sites/default/settings.php ]; then
 
   if [ -f /usr/src/drupal8/drupal.tar.gz ]; then
     mv /usr/src/drupal8/drupal.tar.gz ${DRUPAL_ROOT}
-    
+
     tar -xz --strip-components=1 -f drupal.tar.gz
     rm drupal.tar.gz
-        
+  
     # 在drupal根目录安装 drupal console 本身      
     composer require drupal/console:~1.0 --prefer-dist --optimize-autoloader --sort-packages
-       
+
+    # 在每个drupal项目根目录通过composer单独安装的 drush依赖本身      
+    composer require drush/drush
+    
   else
     echo "下载drupal安装包出现问题, 尝试重新运行 docker-compose up -d 命令"  
   fi
-    
+   
 else 
   echo "drupal 8 已经安装, 如需升级请使用drush"
 fi
 
-# 在每个drupal项目根目录通过composer单独安装的 drush依赖本身      
-composer require drush/drush
-        
 chown -R www-data:www-data ${DRUPAL_ROOT}
 chown -R www-data:www-data ${DRUPAL_PRIVATE}
-    
+
 exec php-fpm
