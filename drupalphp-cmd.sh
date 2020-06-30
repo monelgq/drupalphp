@@ -15,7 +15,7 @@ if [ ! -f ${DRUPAL_ROOT}/sites/default/settings.php ]; then
     rm drupal.tar.gz
   
     # 在drupal根目录安装 drupal console 本身
-    composer require drupal/console:~1.0 --prefer-dist --optimize-autoloader
+    #composer require drupal/console:~1.0 --prefer-dist --optimize-autoloader
     
   else
     echo "下载drupal源码安装包出现问题, 尝试重新运行 docker-compose up -d 命令"
