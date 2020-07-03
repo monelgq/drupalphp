@@ -36,8 +36,8 @@ if [ -f ${DRUPAL_ROOT}/sites/default/settings.php ] && [ -f /var/www/private/dru
     tar -xz --strip-components=1 -f drupal.tar.gz
     rm drupal.tar.gz
     
-    # drupal升级源代码解压后默认删除升级提示文件 drupal.update，每次升级需要临时创建该文件
-    rm /var/www/private/drupal.update
+    # drupal升级源代码后重命名升级提示文件为 default.drupal.update，每次升级时再改名为drupal.update
+    mv /var/www/private/drupal.update /var/www/private/default.drupal.update
     
   else
     echo "下载drupal8安装包出现问题, 尝试重新运行 docker-compose up -d 命令"  
