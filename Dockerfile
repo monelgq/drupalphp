@@ -1,5 +1,5 @@
 # 基础镜像
-FROM php:7.3-fpm
+FROM php:7-fpm
 
 # 镜像配置目录 【 /usr/local/etc/php/php.ini 】【 /usr/local/etc/php/conf.d 】【 /usr/local/etc/php-fpm.conf 】【 /usr/local/etc/php-fpm.d/www.conf 】
 
@@ -20,12 +20,12 @@ RUN apt-get update && apt-get install -y apt-utils wget git mariadb-client unzip
        && rm -rf /var/lib/apt/lists/*
 	
 # 安装 php7 redis 扩展 phpredis 5.2.2
-ADD https://github.com/phpredis/phpredis/archive/5.2.2.tar.gz /tmp/phpredis.tar.gz
-RUN mkdir -p /usr/src/php/ext/redis \
-      && tar xf /tmp/phpredis.tar.gz -C /usr/src/php/ext/redis --strip-components=1 \
-      && docker-php-ext-install redis \
-      && rm -rd /usr/src/php/ext/redis \
-      && rm /tmp/phpredis.tar.gz
+# ADD https://github.com/phpredis/phpredis/archive/5.2.2.tar.gz /tmp/phpredis.tar.gz
+# RUN mkdir -p /usr/src/php/ext/redis \
+#      && tar xf /tmp/phpredis.tar.gz -C /usr/src/php/ext/redis --strip-components=1 \
+#      && docker-php-ext-install redis \
+#     && rm -rd /usr/src/php/ext/redis \
+#     && rm /tmp/phpredis.tar.gz
          
 # 设置drupal安装根目录和私有目录
 ENV DRUPAL_ROOT /var/www/drupal8
