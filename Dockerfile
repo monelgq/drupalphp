@@ -1,5 +1,5 @@
 # 基础镜像
-FROM php:7-fpm
+FROM php:8.2-fpm
 
 # 镜像配置目录 【 /usr/local/etc/php/php.ini 】【 /usr/local/etc/php/conf.d 】【 /usr/local/etc/php-fpm.conf 】【 /usr/local/etc/php-fpm.d/www.conf 】
 
